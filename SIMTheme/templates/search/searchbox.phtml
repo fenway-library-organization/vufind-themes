@@ -60,7 +60,8 @@
   <form id="searchForm" class="searchForm navbar-form navbar-left flip" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs']]); ?>
     <?php $placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? null); ?>
-    <select id="searchForm_type" class="searchForm_type form-control" name="type" data-native-menu="false" aria-label="<?=$this->transEsc("Search type")?>">
+     <label id="lib-cat-text">Library Catalog</label><br> 
+     <select id="searchForm_type" class="searchForm_type form-control" name="type" data-native-menu="false" aria-label="<?=$this->transEsc("Search type")?>">
       <?php $currentGroup = $insideGroup = false; ?>
       <?php foreach ($handlers as $handler): ?>
         <?php
@@ -77,12 +78,16 @@
             }
           }
         ?>
-        <option value="<?=$this->escapeHtmlAttr($handler['value'])?>"<?=$handler['selected'] ? ' selected="selected"' : ''?>><?=$handler['indent'] ? '-- ' : ''?><?=$this->transEsc($handler['label'])?></option>
+	<option value="<?=$this->escapeHtmlAttr($handler['value'])?>"<?=$handler['selected'] ? ' selected="selected"' : ''?>><?=$handler['indent'] ? '-- ' : ''?><?=$this->transEsc($handler['label'])?></option>
       <?php endforeach; ?>
       <?php if ($insideGroup): ?>
         </optgroup>
       <?php endif; ?>
     </select>
+  <!--  <select class="form-control">
+      <option value="contains">Contains</option>
+      <option value="starts">Starts With</option>
+    </select> -->
     <input id="searchForm_lookfor" placeholder="Search for books, ebooks, & videos" class="searchForm_lookfor form-control search-query<?php if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><?=$this->searchbox()->autocompleteAutoSubmit($this->searchClassId) ? ' ac-auto-submit' : '' ?><?php endif ?>" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>"<?php if ($placeholder): ?> placeholder="<?=$this->transEsc($placeholder) ?>"<?php endif ?> aria-label="<?=$this->transEsc("search_terms")?>" />
     <?php if ($handlerCount > 1): ?>
     <?php elseif ($handlerCount == 1): ?>
