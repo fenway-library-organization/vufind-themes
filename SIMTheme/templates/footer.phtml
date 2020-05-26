@@ -1,8 +1,8 @@
 <footer class="hidden-print">
   <div class="footer-container">
     <div class="footer-column">
-      <p><strong><?=$this->transEsc('Other Services')?></strong></p>
-      <ul>
+      <p class="footer-header"><strong><?=$this->transEsc('Other Services')?></strong></p>
+      <ul class="footer-list">
 	      <li><a href="https://libfs3.simmons.edu/illiad/" target="_blank">Interlibrary Loan</a></li>
 	      <li><a href="https://www.simmons.edu/library/resources/purchase" target="_blank">Request a Purchase</a></li>
               <li><a href="https://www.simmons.edu/library/resources/other-libraries" target="_blank">Other Libraries</a></li>
@@ -11,8 +11,8 @@
       </ul>
     </div>
     <div class="footer-column">
-      <p><strong><?=$this->transEsc('Search Options')?></strong></p>
-      <ul>
+      <p class="footer-header"><strong><?=$this->transEsc('Search Options')?></strong></p>
+      <ul class="footer-list">
 	<li><a href="<?=$this->url('search-advanced')?>"><?=$this->transEsc('Advanced Search')?></a></li>
         <li><a href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse')?></a></li>
 	<li><a href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse by Call Number')?></a></li>
@@ -22,8 +22,8 @@
       </ul>
     </div>
     <div class="footer-column">
-      <p><strong><?=$this->transEsc('Contact')?></strong></p>
-      <ul>
+      <p class="footer-header"><strong><?=$this->transEsc('Contact')?></strong></p>
+      <ul class="footer-list">
 	<li><a href="mailto:reference@simmons.edu"><i class="fa fa-envelope" aria-hidden="true"></i> reference@simmons.edu</a></li>
 	<li><a href="tel:617-521-2786"><i class="fa fa-phone" aria-hidden="true"></i> (617)-521-2786</a></li>
  <li>
@@ -72,7 +72,7 @@ function newWindow() {
 <!--CHAT END-->
 
 </li>
-<li><a href="https://www.simmons.edu/library/about/contact-us/meet-librarian" target="_blank">Make an appointment</a></li>
+<li><a href="https://www.simmons.edu/library/about/contact-us/meet-librarian" target="_blank"><i class="fa fa-calendar" aria-hidden="true"></i> Make an appointment</a></li>
       </ul>
     </div>
   </div>
