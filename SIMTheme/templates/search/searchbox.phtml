@@ -60,7 +60,7 @@
   <form id="searchForm" class="searchForm navbar-form navbar-left flip" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs']]); ?>
     <?php $placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? null); ?>
-     <label><a id="lib-cat-text" href=""<?=$this->url('home')?>>Library Catalog</a></label><br> 
+     <label><a id="lib-cat-text" href="<?=$this->url('alphabrowse-home')?>">Library Catalog</a></label><br>
      <select id="searchForm_type" class="searchForm_type form-control" name="type" data-native-menu="false" aria-label="<?=$this->transEsc("Search type")?>">
       <?php $currentGroup = $insideGroup = false; ?>
       <?php foreach ($handlers as $handler): ?>
