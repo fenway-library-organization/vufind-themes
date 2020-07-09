@@ -1,9 +1,11 @@
 <?php
   // Set up page title:
   $lookfor = $this->results->getUrlQuery()->isQuerySuppressed() ? '' : $this->params->getDisplayQuery();
-  $headTitle = $this->slot('head-title')
-        ->get($this->translate('Search Results') . (empty($lookfor) ? '' : " - {$lookfor}"));
-  $this->headTitle($headTitle);
+  if (isset($this->overrideTitle)) {
+      $this->headTitle($this->overrideTitle);
+  } else {
+      $this->headTitle($this->translate('Search Results') . (empty($lookfor) ? '' : " - {$lookfor}"));
+  }
 
   // Set up search box:
   $this->layout()->searchbox = $this->context($this)->renderInContext(
@@ -15,7 +17,7 @@
         'searchId' => $this->results->getSearchId(),
         'searchClassId' => $this->params->getSearchClassId(),
         'checkboxFilters' => $this->params->getCheckboxFacets(),
-        'filterList' => $this->params->getFilterList(true),
+        'filterList' => $this->params->getFilters(),
         'hasDefaultsApplied' => $this->params->hasDefaultsApplied(),
         'selectedShards' => $this->params->getSelectedShards(),
         'ignoreHiddenFiltersInRequest' => isset($this->ignoreHiddenFiltersInRequest) ? $this->ignoreHiddenFiltersInRequest : false,
@@ -24,7 +26,11 @@
   );
 
   // Set up breadcrumbs:
-  $this->layout()->breadcrumbs .= '<li class="active">' . $this->escapeHtml($headTitle) . '</li>';
+  if (isset($this->overrideTitle)) {
+    $this->layout()->breadcrumbs .= '<li class="active">' . $this->escapeHtml($this->overrideTitle) . '</li>';
+  } else {
+    $this->layout()->breadcrumbs .= '<li class="active">' . $this->transEsc('Search') . ': ' . $this->escapeHtml($lookfor) . '</li>';
+  }
 
   // Enable cart if appropriate:
   $this->showBulkOptions = $this->params->getOptions()->supportsCart() && $this->showBulkOptions;
@@ -54,6 +60,7 @@
   <?php endif; ?>
   <?=$this->flashmessages()?>
   <nav class="search-header hidden-print">
+
     <div class="search-stats">
       <?php if ($recordTotal > 0): ?>
         <?=$this->context()->renderInContext('search/controls/showing.phtml', ['lookfor' => $lookfor, 'recordTotal' => $recordTotal]) ?>
@@ -63,11 +70,11 @@
       <?php else: ?>
         <h2><?=$this->transEsc('nohit_heading')?></h2>
       <?php endif; ?>
-    <!--</div>-->
+    <!--</div>
 
-  <!--<div class="searchtools hidden-print">-->
-     <br> <a href="<?=$this->url('search-email')?>" class="mailSearch" data-lightbox id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>">
-        <i class="fa fa-envelope" aria-hidden="true"></i> <?=$this->transEsc('Email this Search')?>
+    <div class="searchtools hidden-print">-->
+      <a href="<?=$this->url('search-email')?>" class="mailSearch" data-lightbox id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>">
+       <br> <i class="fa fa-envelope" aria-hidden="true"></i> <?=$this->transEsc('Email this Search')?>
       </a>
       <?php if ($this->accountCapabilities()->getSavedSearchSetting() === 'enabled'): ?>
         &mdash;
@@ -81,6 +88,8 @@
       <?php endif; ?>
     </div>
 
+
+
     <?php if ($recordTotal > 0): ?>
       <div class="search-controls">
         <?=$this->render('search/controls/limit.phtml')?>
@@ -93,13 +102,12 @@
 
   <?php if ($recordTotal < 1): ?>
     <p>
-      <?php
-        $emptyMessage = $this->slot('empty-message')->get(
-          $this->translate('nohit_lookfor_html', ['%%lookfor%%' => $this->escapeHtml($lookfor)])
-        );
-        $this->layout()->srmessage = $emptyMessage;
-        echo $emptyMessage;
-      ?>
+      <?php if (isset($this->overrideEmptyMessage)): ?>
+        <?=$this->overrideEmptyMessage?>
+      <?php else: ?>
+        <?php $this->layout()->srmessage = $this->translate('nohit_lookfor_html', ['%%lookfor%%' => $this->escapeHtml($lookfor)]); ?>
+        <?=$this->layout()->srmessage ?>
+      <?php endif; ?>
     </p>
     <?php if (isset($this->parseError)): ?>
       <p class="alert alert-danger"><?=$this->transEsc('nohit_parse_error')?></p>
@@ -120,6 +128,24 @@
     <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', ['idPrefix' => 'bottom_', 'formAttr' => 'search-cart-form'])?>
     <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', ['results' => $this->results, 'options' => isset($this->paginationOptions) ? $this->paginationOptions : []])?>
 
+   <!-- <div class="searchtools hidden-print">
+      <strong><?=$this->transEsc('Search Tools')?>:</strong>
+      <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>"><i class="fa fa-bell" aria-hidden="true"></i> <?=$this->transEsc('Get RSS Feed')?></a>
+      &mdash;
+      <a href="<?=$this->url('search-email')?>" class="mailSearch" data-lightbox id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>">
+        <i class="fa fa-envelope" aria-hidden="true"></i> <?=$this->transEsc('Email this Search')?>
+      </a>
+      <?php if ($this->accountCapabilities()->getSavedSearchSetting() === 'enabled'): ?>
+        &mdash;
+        <?php if (is_numeric($this->results->getSearchId())): ?>
+          <?php if ($this->results->isSavedSearch()): ?>
+            <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-remove" aria-hidden="true"></i> <?=$this->transEsc('save_search_remove')?></a>
+          <?php else: ?>
+            <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-save" aria-hidden="true"></i> <?=$this->transEsc('save_search')?></a>
+          <?php endif; ?>
+        <?php endif; ?>
+      <?php endif; ?>
+    </div>-->
   <?php endif; ?>
 </div>
 <?php /* End Main Listing */ ?>

@@ -26,8 +26,14 @@
         $this->transEsc('Email') => 'email',
       ]
     )?>
+    <?php if ($this->profile['expiration_date']): ?>
+      <tr><th><?=$this->transEsc('Expires')?>:</th><td><?=$this->profile['expiration_date'] ?? ''?></td></tr>
+    <?php endif; ?>
     <?php /* this section renders under two distinct circumstances; see if/else below: */ ?>
-    <?php if (count($this->pickup ?? []) > 1 || !empty($this->preferredLibraryDisplay)): ?>
+    <!-- overriding logic here to always hide Preferred Library set to:
+	 "if (count($this->pickup ?? []) > 1 || !empty($this->preferredLibraryDisplay))"
+         to restore default behavior -->
+    <?php if (false): ?>
       <tr>
         <th><?=$this->transEsc('Preferred Library')?>:</th>
         <td>

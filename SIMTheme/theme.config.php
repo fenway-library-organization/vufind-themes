@@ -4,5 +4,6 @@ return [
 	'css' => [
 		'custom.css'
 
-	]
+	],
+	'favicon' => 'favicon.ico'
 ];
