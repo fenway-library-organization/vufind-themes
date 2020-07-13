@@ -1,0 +1,20 @@
+<?php
+  $expandFacetSet = $this->recommend->getExpandedSet();
+  // Get empty search object to use as basis for parameter generation below:
+  $blankResults = $this->recommend->getEmptyResults();
+?>
+<?php if ($expandFacetSet): ?>
+  <div class="sidegroup">
+ <?php foreach ($expandFacetSet as $title => $cluster): ?>
+   <!-- <h4><?=$this->transEsc($cluster['label']) ?></h4>-->
+    <div class="list-group facet-group">
+      <button class="title collapsed" data-toggle="collapse" href="#side-collapse-subject-first" aria-expanded="true">Related Subjects</button>
+      <div id="side-collapse-subject-first" class="collapse">
+      <?php foreach ($cluster['list'] as $thisFacet): ?>
+        <a class="list-group-item" href="<?=$this->url('search-results') . $blankResults->getUrlQuery()->addFacet($title, $thisFacet['value'])?>"><?=$this->escapeHtml($thisFacet['displayText'])?></a>
+      <?php endforeach; ?>
+       </div>
+    </div>
+ <?php endforeach; ?>
+  </div>
+<?php endif; ?>
